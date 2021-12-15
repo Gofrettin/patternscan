@@ -1,9 +1,19 @@
-﻿#include <iostream>
+#include <iostream>
 #include <Windows.h>
-
-//#define PATTERNSCAN_USE64BIT      //You maybe want 64bit pointer type even thought you are in x86.
-//#define PATTERNSCAN_USE32BIT      //or vice versa
 #include "patternscan.h"
+
+//PatternScan function list
+template <class Type> Type Range(Type Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM);
+template <class Type> Type Range(Type Address, size_t Len, std::string strPattern, TypeRPMFunc<Type> RPM);
+template <class Type> Type Module(Type ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM);
+template <class Type> Type Module(Type ModuleBase, std::string strPattern, TypeRPMFunc<Type> RPM);
+uintptr_t Range(uintptr_t Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Range(uintptr_t Address, size_t Len, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Module(uintptr_t ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Module(uintptr_t ModuleBase, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
+//You can specify the type which is uint32_t or uint64_t when you do PatternScan.
+//uint32_t is for 32bit process scan, uint64_t is for 64bit process scan.
+//If you don't specify type, type is uintptr_t.
 
 int main()
 {
@@ -21,9 +31,8 @@ int main()
     //KERNELBASE.GetCurrentProcessId + 6 - 8B 40 20         - mov eax, [eax + 20]
     //KERNELBASE.GetCurrentProcessId + 9 - C3               - ret
 #endif
-
-    uintptr ScanResult = PatternScan::Module((uintptr)hModule, Pattern_GetCurrentProcessId,
-        [&](uintptr Address, void* Buffer, size_t Size) -> bool {
+    uintptr_t ScanResult = PatternScan::Module((uintptr_t)hModule, Pattern_GetCurrentProcessId,
+        [&](uintptr_t Address, void* Buffer, size_t Size) -> bool {
             NumberOfRPMCalled++;
             SIZE_T nBytesRead;
             //Replace ReadProcessMemry with your own read method.
