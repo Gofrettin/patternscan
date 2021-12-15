@@ -23,6 +23,9 @@ uintptr_t Range(uintptr_t Address, size_t Len, uint8_t* bMask, uint8_t* vMask, T
 uintptr_t Range(uintptr_t Address, size_t Len, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
 uintptr_t Module(uintptr_t ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<uintptr_t> RPM);
 uintptr_t Module(uintptr_t ModuleBase, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
+//You can specify the type which is uint32_t or uint64_t when you do PatternScan.
+//uint32_t is for 32bit process scan, uint64_t is for 64bit process scan.
+//If you don't specify type, type is uintptr_t.
 ```
 See "test.cpp" and "patternscan.h" for more information
 
