@@ -1,5 +1,6 @@
 # patternscan
 very simple library for pattern scan   
+Whatever RPM method you use, you can integrate it with PatternScan.   
 example usage
 ```
 //Include just one header file.
