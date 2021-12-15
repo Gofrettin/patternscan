@@ -12,13 +12,18 @@ uintptr ScanResult = PatternScan::Module((uintptr)hModule, Pattern_GetCurrentPro
             return ReadProcessMemory(GetCurrentProcess(), LPCVOID(Address), Buffer, Size, &nBytesRead) == TRUE;
         });
 //done!
-//public methods list
-//using TypeRPMFunc = std::function<bool(uintptr Address, void* Buffer, size_t Size)>;
-//static uintptr PatternScan::Module(uintptr ModuleBase, std::string strPattern, TypeRPMFunc RPM);
-//static uintptr PatternScan::Module(uintptr ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc RPM);
-//static uintptr PatternScan::Range(uintptr Address, size_t Len, std::string strPattern, TypeRPMFunc RPM);
-//static uintptr PatternScan::Range(uintptr Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc RPM);
+
+//PatternScan function list
+template <class Type> using TypeRPMFunc = std::function<bool(Type Address, void* Buffer, size_t Size)>;
+template <class Type> Type Range(Type Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM);
+template <class Type> Type Range(Type Address, size_t Len, std::string strPattern, TypeRPMFunc<Type> RPM);
+template <class Type> Type Module(Type ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM);
+template <class Type> Type Module(Type ModuleBase, std::string strPattern, TypeRPMFunc<Type> RPM);
+uintptr_t Range(uintptr_t Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Range(uintptr_t Address, size_t Len, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Module(uintptr_t ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Module(uintptr_t ModuleBase, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
 ```
 See "test.cpp" and "patternscan.h" for more information
 
-![Desktop Screenshot 2021 12 09 - 02 13 32 86](https://user-images.githubusercontent.com/32794121/146100656-c4cc1bbd-e6a0-4556-995f-cd6bc1cf8518.jpg)
+![Desktop Screenshot 2021 12 09 - 02 13 32 86](https://user-images.githubusercontent.com/32794121/146113631-8dd9ccf8-e9be-4ad8-84a5-d279505d04e7.jpg)
