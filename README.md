@@ -13,6 +13,7 @@ uintptr ScanResult = PatternScan::Module((uintptr)hModule, Pattern_GetCurrentPro
         });
 //done!
 //public methods list
+//using TypeRPMFunc = std::function<bool(uintptr Address, void* Buffer, size_t Size)>;
 //static uintptr PatternScan::Module(uintptr ModuleBase, std::string strPattern, TypeRPMFunc RPM);
 //static uintptr PatternScan::Module(uintptr ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc RPM);
 //static uintptr PatternScan::Range(uintptr Address, size_t Len, std::string strPattern, TypeRPMFunc RPM);
