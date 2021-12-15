@@ -9,6 +9,7 @@ example usage
 uintptr ScanResult = PatternScan::Module((uintptr)hModule, Pattern_GetCurrentProcessId,
         [&](uintptr Address, void* Buffer, size_t Size) -> bool {
             SIZE_T nBytesRead;
+            //Replace ReadProcessMemry with your own read method.
             return ReadProcessMemory(GetCurrentProcess(), LPCVOID(Address), Buffer, Size, &nBytesRead) == TRUE;
         });
 //done!
