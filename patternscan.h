@@ -70,7 +70,7 @@ private:
 
 	template <class Type>
 	static bool GetModuleInfo(Type ModuleBase, DWORD& BaseOfCode, DWORD& SizeOfCode, TypeRPMFunc<Type> RPM) {
-		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must 32bit or 64bit pointer type");
+		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must be 32bit or 64bit.");
 
 		IMAGE_DOS_HEADER DosHeader;
 		if (!RPM(ModuleBase, &DosHeader, sizeof(DosHeader)))
@@ -80,9 +80,9 @@ private:
 			return false;
 
 		using NtHeadersType = IMAGE_NT_HEADERS64;
-		if constexpr (std::is_same<Type, uint32_t>::value)
-			NtHeadersType = IMAGE_NT_HEADERS32;
-		
+		if (std::is_same<Type, uint32_t>::value)
+			using NtHeadersType = IMAGE_NT_HEADERS32;
+
 		NtHeadersType NtHeaders;
 		if (!RPM(ModuleBase + DosHeader.e_lfanew, &NtHeaders, sizeof(NtHeaders)))
 			return false;
@@ -98,7 +98,7 @@ private:
 public:
 	template <class Type>
 	static Type Range(Type Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM) {
-		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must 32bit or 64bit pointer type");
+		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must be 32bit or 64bit.");
 
 		size_t SizeOfPattern = strlen((const char*)bMask) - 1;
 		Type Start = Address & ~0xFFF;
@@ -131,7 +131,7 @@ public:
 
 	template <class Type>
 	static Type Range(Type Address, size_t Len, std::string strPattern, TypeRPMFunc<Type> RPM) {
-		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must 32bit or 64bit pointer type");
+		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must be 32bit or 64bit.");
 
 		uint8_t bMask[MAX_MASK_SIZE] = { 0 };
 		uint8_t vMask[MAX_MASK_SIZE] = { 0 };
@@ -143,7 +143,7 @@ public:
 
 	template <class Type>
 	static Type Module(Type ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM) {
-		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must 32bit or 64bit pointer type");
+		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must be 32bit or 64bit.");
 
 		DWORD BaseOfCode, SizeOfCode;
 		if (!GetModuleInfo<Type>(ModuleBase, BaseOfCode, SizeOfCode, RPM))
@@ -154,7 +154,7 @@ public:
 
 	template <class Type>
 	static Type Module(Type ModuleBase, std::string strPattern, TypeRPMFunc<Type> RPM) {
-		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must 32bit or 64bit pointer type");
+		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must be 32bit or 64bit.");
 
 		DWORD BaseOfCode, SizeOfCode;
 		if (!GetModuleInfo<Type>(ModuleBase, BaseOfCode, SizeOfCode, RPM))
