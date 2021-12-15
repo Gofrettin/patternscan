@@ -1,6 +1,7 @@
 # patternscan
 very simple library for pattern scan   
-example usage
+Whatever RPM method you use, you can integrate it with PatternScan.   
+example usage   
 ```
 //Include just one header file.
 #include "patternscan.h"
@@ -8,13 +9,22 @@ example usage
 uintptr ScanResult = PatternScan::Module((uintptr)hModule, Pattern_GetCurrentProcessId,
         [&](uintptr Address, void* Buffer, size_t Size) -> bool {
             SIZE_T nBytesRead;
+            //Replace ReadProcessMemry with your own read method.
             return ReadProcessMemory(GetCurrentProcess(), LPCVOID(Address), Buffer, Size, &nBytesRead) == TRUE;
         });
 //done!
-//public methods list
-//static uintptr PatternScan::Module(uintptr ModuleBase, std::string strPattern, TypeRPMFunc RPM);
-//static uintptr PatternScan::Module(uintptr ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc RPM);
-//static uintptr PatternScan::Range(uintptr Address, size_t Len, std::string strPattern, TypeRPMFunc RPM);
-//static uintptr PatternScan::Range(uintptr Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc RPM);
+ 
+//PatternScan function list
+template <class Type> using TypeRPMFunc = std::function<bool(Type Address, void* Buffer, size_t Size)>;
+template <class Type> Type Range(Type Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM);
+template <class Type> Type Range(Type Address, size_t Len, std::string strPattern, TypeRPMFunc<Type> RPM);
+template <class Type> Type Module(Type ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM);
+template <class Type> Type Module(Type ModuleBase, std::string strPattern, TypeRPMFunc<Type> RPM);
+uintptr_t Range(uintptr_t Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Range(uintptr_t Address, size_t Len, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Module(uintptr_t ModuleBase, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<uintptr_t> RPM);
+uintptr_t Module(uintptr_t ModuleBase, std::string strPattern, TypeRPMFunc<uintptr_t> RPM);
+//You can specify the type which is uint32_t or uint64_t when you do PatternScan.
+//uint32_t is for 32bit process scan, uint64_t is for 64bit process scan.
+//If you don't specify type, type is uintptr_t.
 ```
-See "test.cpp" and "patternscan.h" for more information
