@@ -100,7 +100,6 @@ public:
 	static Type Range(Type Address, size_t Len, uint8_t* bMask, uint8_t* vMask, TypeRPMFunc<Type> RPM) {
 		static_assert(std::is_same<Type, uint32_t>::value | std::is_same<Type, uint64_t>::value, "Type must be 32bit or 64bit.");
 
-		size_t SizeOfPattern = strlen((const char*)bMask) - 1;
 		Type Start = Address & ~0xFFF;
 		Type End = (Address + Len + 0x1000) & ~0xFFF;
 
@@ -110,7 +109,7 @@ public:
 			if (!RPM(i, Buf, 0x1000))
 				continue;
 
-			RPM(i + 0x1000, Buf + 0x1000, SizeOfPattern);
+			RPM(i + 0x1000, Buf + 0x1000, 0x1000);
 
 			Type AddressTemp = (Type)Buf;
 			while (1) {
